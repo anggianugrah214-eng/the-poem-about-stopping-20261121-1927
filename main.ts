@@ -21,4 +21,10 @@ const POEM = [
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
+// The competition requires 1 to 280 Unicode code points: refuse to
+// write an out-of-range poem rather than submit an invalid entry.
+const points = [...POEM].length;
+if (points < 1 || points > 280) {
+  throw new Error(`poem is ${points} code points, outside the 1-280 range`);
+}
 writeFileSync(join(outDir, "entry.txt"), POEM, "utf8");
